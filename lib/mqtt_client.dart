@@ -317,8 +317,10 @@ class MqttClient<E extends VirtualMqttConnection> {
         _mqttConnection.sendMessageToBroker(mAck, debugMessage);
         _resetTimer();      
       } 
-    
-      print("[mqttClient] [" + m._topic + "][" + m._payload + "]");
+
+      if (verbosity > 1) {
+        print("[mqttClient] [" + m._topic + "][" + m._payload + "]");
+      }
       // notify the client of the new topic / payload
       if (onSubscribeData != null) onSubscribeData(m._topic, m._payload);
       
