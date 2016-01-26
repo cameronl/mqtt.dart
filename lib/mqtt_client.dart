@@ -15,6 +15,15 @@ class MqttClient<E extends VirtualMqttConnection> {
   var _liveTimer;
 
   bool debugMessage;
+
+  int _verbosity = 1;
+  int get verbosity => _verbosity;
+  void set verbosity(int v) {
+    if (v == null) { v = 0; }
+    if (v >= 3) { debugMessage = true; }
+    _verbosity = v;
+  }
+
   MqttWill _will;
   
   /**
