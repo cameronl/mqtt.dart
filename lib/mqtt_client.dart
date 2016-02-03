@@ -20,7 +20,7 @@ class MqttClient<E extends VirtualMqttConnection> {
   int get verbosity => _verbosity;
   void set verbosity(int v) {
     if (v == null) { v = 0; }
-    if (v >= 3) { debugMessage = true; }
+    debugMessage = (v >= 3) ? true : false;
     _verbosity = v;
   }
 
