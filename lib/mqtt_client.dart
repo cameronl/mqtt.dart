@@ -15,6 +15,15 @@ class MqttClient<E extends VirtualMqttConnection> {
   var _liveTimer;
 
   bool debugMessage;
+
+  int _verbosity = 1;
+  int get verbosity => _verbosity;
+  void set verbosity(int v) {
+    if (v == null) { v = 0; }
+    debugMessage = (v >= 3) ? true : false;
+    _verbosity = v;
+  }
+
   MqttWill _will;
   
   /**
@@ -308,8 +317,10 @@ class MqttClient<E extends VirtualMqttConnection> {
         _mqttConnection.sendMessageToBroker(mAck, debugMessage);
         _resetTimer();      
       } 
-    
-      print("[mqttClient] [" + m._topic + "][" + m._payload + "]");
+
+      if (verbosity > 1) {
+        print("[mqttClient] [" + m._topic + "][" + m._payload + "]");
+      }
       // notify the client of the new topic / payload
       if (onSubscribeData != null) onSubscribeData(m._topic, m._payload);
       
