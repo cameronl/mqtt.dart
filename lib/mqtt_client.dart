@@ -107,7 +107,9 @@ class MqttClient<E extends VirtualMqttConnection> {
    */
   Future<MqttMessagePuback> publish(String topic, String payload, [num messageID = 1, int QoS = 0, bool retain = false]) {
     int retainFlag = (retain) ? 1 : 0;
-    print("Publish $topic: $payload (ID: $messageID - QoS: $QoS - retain: $retainFlag)");
+    if (verbosity > 1) {
+      print("Publish $topic: $payload (ID: $messageID - QoS: $QoS - retain: $retainFlag)");
+    }
 
     Completer puback = _addMessageToComplete(messageID, QoS, new MqttMessagePuback.initWithMessageID(messageID));
     
