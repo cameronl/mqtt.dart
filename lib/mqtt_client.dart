@@ -326,7 +326,21 @@ class MqttClient<E extends VirtualMqttConnection> {
      * handle PUBLISH message
      */
     int _handlePublish(data) {
-      MqttMessagePublish m = new MqttMessagePublish.decode(data, debugMessage);     
+      MqttMessagePublish m;
+      try {
+        m = new MqttMessagePublish.decode(data, debugMessage);
+      } on FormatException catch (e) {
+        print("WARNING ($e) while decoding received message, skipping _handlePublish().\n" +
+            "  data: $data\n" +
+            "  UTF8.decode(allowMalformed: true) would be: '${UTF8.decode(data, allowMalformed: true)}'");
+        return data.length;
+      } on RangeError catch (e) {
+        print("WARNING ($e) while decoding received message, skipping _handlePublish().\n" +
+            "  data: $data\n" +
+            "  UTF8.decode(allowMalformed: true) would be: '${UTF8.decode(data, allowMalformed: true)}'");
+        return data.length;
+      }
+
       if (m.len > data.length) {
         // Not enough data yet 
         return 0;
