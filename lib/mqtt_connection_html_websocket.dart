@@ -15,7 +15,7 @@ class MqttConnectionHtmlWebSocket extends VirtualMqttConnection{
     print("[HTML WebSocket] Connecting to $_url");
     
     Completer connected = new Completer();
-    _ws = new WebSocket(_url);
+    _ws = new WebSocket(_url, ['mqtt']);
     _ws.binaryType = "arraybuffer";
     _ws.onOpen.listen((e) {
       connected.complete(_ws);
