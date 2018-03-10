@@ -168,7 +168,7 @@ main(List<String> args) {
   }
   // connect to broker
   c.connect(onConnectionLost)
-    .then( (c)=> subscribe(c, mqttOptions)) 
+    .then( (_)=> subscribe(c, mqttOptions))
     .catchError((e) => print("Error: $e"), test: (e) => e is SocketException)  
     .catchError((mqttErr) {
       print("Error: $mqttErr");

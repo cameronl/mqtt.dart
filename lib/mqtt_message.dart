@@ -62,8 +62,9 @@ abstract class MqttMessage {
   /**
    * operator ==
    */
-  bool operator == (MqttMessage other) {
-    return ( type == other.type
+  bool operator == (other) {
+    return (other is MqttMessage
+          && type == other.type
           && len == other.len
           && QoS == other.QoS
           && DUP == other.DUP
