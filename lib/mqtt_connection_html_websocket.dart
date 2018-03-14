@@ -29,7 +29,7 @@ class MqttConnectionHtmlWebSocket extends VirtualMqttConnection{
   }
   
   privateSendMessageToBroker(MqttMessage m) {
-    print("[HTML WebSocket] SendMessage ${m.buf}");
+    //print("[HTML WebSocket] SendMessage ${m.buf}");
     _ws.send(new Uint8List.fromList(m.buf));
   }
 
