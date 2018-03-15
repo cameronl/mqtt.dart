@@ -8,7 +8,7 @@ class MqttMessagePublishMatcher extends Matcher {
   MqttMessagePublishMatcher(this._expected);
   
   bool matches(actual, Map mapState) {
-    return (_expected == actual);
+    return (_expected.matches(actual));
   }
   
    describe(Description description) {

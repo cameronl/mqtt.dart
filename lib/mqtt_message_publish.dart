@@ -27,9 +27,13 @@ class MqttMessagePublish extends MqttMessage {
                                                                          QoS, retain);
   
   MqttMessagePublish.decode(List<int> data, [bool debugMessage = false]) : _msgID_MSB = 0, _msgID_LSB = 0, _payload = "", _payloadPos =0,  super.decode(data, debugMessage);
-  
-  bool operator == (other) {
-        return ( super==(other)
+
+  /**
+   * matches
+   * Returns true if this message is structurally equal to other
+   */
+  bool matches(MqttMessage other) {
+        return (super.matches(other)
           && other is MqttMessagePublish
           && _msgID_MSB == other._msgID_MSB
           && _msgID_LSB == other._msgID_LSB

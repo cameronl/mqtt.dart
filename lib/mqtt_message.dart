@@ -60,11 +60,11 @@ abstract class MqttMessage {
     return "Type(${type}) Len(${len}) QoS(${QoS}) DUP(${DUP}) retain(${retain}) <${bufString}>]";
   }
   /**
-   * operator ==
+   * matches
+   * Returns true if this message is structurally equal to [other]
    */
-  bool operator == (other) {
-    return (other is MqttMessage
-          && type == other.type
+  bool matches (MqttMessage other) {
+    return (type == other.type
           && len == other.len
           && QoS == other.QoS
           && DUP == other.DUP
