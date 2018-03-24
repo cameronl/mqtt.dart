@@ -50,8 +50,8 @@ class MqttClient<E extends VirtualMqttConnection> {
     if (onConnectionLostCallback != null) onConnectionLost = onConnectionLostCallback;
     
     _mqttConnection.connect().then( (socket) => _handleConnected(socket))
-                    .catchError((e) => _mqttConnection.handleConnectError(e));
-    
+        .catchError((e) => _connack.completeError(e));
+        //.catchError((e) => _mqttConnection.handleConnectError(e));
 
      return _connack.future;
   }
