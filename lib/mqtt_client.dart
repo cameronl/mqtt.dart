@@ -343,13 +343,54 @@ class MqttClient<E extends VirtualMqttConnection> {
       if (debugMessage) {
         print("[mqttClient] [" + m._topic + "][" + m._payload + "]");
       }
+      // TODO This fails for wildcard subscribes
+      // Because m._topic is not in the map, the wildcard is.
+      //
+      // Example:
+      //
+      //     mqtt.subscribe('#', mycallback);
+      //
+      //     // results in:
+      //     // _onSubscribeDataMap['#'] = mycallback
+      //
+      //     // On receipt ('mydevice/status', 'foo')
+      //     //
+      //     _onSubscribeDataMap[m._topic]
+      //     // is actually:
+      //     _onSubscribeDataMap['mydevice/status']
+      //     // not
+      //     _onSubscribeDataMap['#']
+
       // notify the client of the new topic / payload
-      if (_onSubscribeDataMap != null && _onSubscribeDataMap[m._topic] != null) 
-        _onSubscribeDataMap[m._topic](m._topic, m._payload);
-      
+      Function cb = _matchWildcardSubscribeData(m._topic);
+      if (cb != null) {
+        cb(m._topic, m._payload);
+      }
+
       return m.len;
     }
-    
+
+    Function _matchWildcardSubscribeData(String topic) {
+      if (_onSubscribeDataMap == null) {
+        return null;
+      }
+      for (var subscribeTopic in _onSubscribeDataMap.keys) {
+        if (subscribeTopic == topic || subscribeTopic == "#") {
+          return _onSubscribeDataMap[subscribeTopic];
+        }
+
+        int wildcard = subscribeTopic.indexOf("/#");
+        if (wildcard > -1) {
+          var matchedPart = subscribeTopic.substring(0, wildcard);
+          if (topic.startsWith(matchedPart)) {
+            return _onSubscribeDataMap[subscribeTopic];
+          }
+        }
+      }
+
+      return null;
+    }
+
     /**
      * _handlePuckAck
      * handle PUBACK message
