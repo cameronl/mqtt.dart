@@ -384,6 +384,8 @@ class MqttClient<E extends VirtualMqttConnection> {
       return m.len;
     }
 
+    /// Support multi-level wildcard (#) in subscriptions.
+    /// But not yet single-level wildcard (+)
     Function _matchWildcardSubscribeData(String topic) {
       if (_onSubscribeDataMap == null) {
         return null;
